@@ -1,3 +1,13 @@
+#' create data frame showing amount of searching in Naver for each keyword
+#'
+#' @param topics vector of topics
+#' @param start_yyyymmdd start date e.g. 20150131
+#' @param end_yyyymmdd end date e.g. 20150131
+#' @return data frame with topic (keyword), period (date), value (amount of searching)
+#' @examples
+#' ntrends(c("seoul", "tokyo"), "20150101", "20161116")
+
+
 ntrends <- function(topics, start_yyyymmdd, end_yyyymmdd) {
 
   # create queryText by concatenating keywords

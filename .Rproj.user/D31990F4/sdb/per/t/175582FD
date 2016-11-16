@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' create data frame showing amount of searching in Naver for each keyword\n#'\n#' @param topics vector of topics\n#' @param start_yyyymmdd start date e.g. 20150131\n#' @param end_yyyymmdd end date e.g. 20150131\n#' @return data frame with topic (keyword), period (date), value (amount of searching)\n#' @examples\n#' ntrends(c(\"seoul\", \"tokyo\"), \"20150101\", \"20161116\")\n\n\nntrends <- function(topics, start_yyyymmdd, end_yyyymmdd) {\n\n  # create queryText by concatenating keywords\n  word_linked <- lapply(topics, function(topic) { paste(topic, topic, sep=\"__SZLIG__\")})\n  queryText <- do.call(paste, c(word_linked, sep=\"__OUML__\"))\n\n  url <- \"http://datalab.naver.com/ca/step1/process.naver\"\n  pl <- list(qcType=\"N\",\n             queryGroups=queryText,\n             startDate=start_yyyymmdd,\n             endDate=end_yyyymmdd);\n  r <- httr::POST(url, body = pl)\n  res <- httr::content(r)\n\n  # bind results from each topic\n  df <- do.call(rbind, lapply(res$result, processSeries))\n  return(df)\n}\n\nprocessSeries <- function(sdata) {\n  # a function creates time series for a topic\n  title <- sdata$title\n  tdf <- do.call(rbind,\n                 lapply(sdata$data,\n                        data.frame,\n                        stringsAsFactors=FALSE))\n  tdf <- dplyr::mutate(tdf,\n                       topic=title,\n                       period=as.Date(period, \"%Y%m%d\"),\n                       value=as.numeric(value))\n  return(tdf)\n}\n\n",
+    "created" : 1479311031639.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1273782241",
+    "id" : "175582FD",
+    "lastKnownWriteTime" : 1479320958,
+    "last_content_update" : 1479320958051,
+    "path" : "C:/WORK/repo/naveRtrends/R/naveRtrends.r",
+    "project_path" : "R/naveRtrends.r",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
