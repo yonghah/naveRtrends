@@ -4,7 +4,11 @@ R package for Naver trends
 # Install
 devtools::install_github("yonghah/naveRtrends")
 
-# Example
+## Prerequisites
+httr
+dplyr
+
+# Usage
 ```
 > library(naveRtrends)
 > df <- ntrends(c("seoul", "tokyo"), "20150101", "20161116")
